@@ -23,6 +23,20 @@ The configuration is made via the configuration.yaml file, there you
 will be able to set-up the number of articles per page, theme and social
 media auto-share.
 
+# Markdown
+We use our customized flavor of Markdown, you can find the complete doc
+here: gentle.io/markdown/
+
+* # Title (<h1>)
+* ## Title (<h2>)
+* ### Title (<h3>)
+* #...# Title (<h6>)
+* [link to url](url) 
+* youtube:youtube_code
+* \*italics\*
+* \*\*bold\*\*
+* (text)[color:#CODE]
+
 # Contribute
 Pull requests are *always* welcome, if you do not know where to begin
 then we suggest that you take a look at the Issues or hit us up on
