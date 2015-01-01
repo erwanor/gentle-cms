@@ -27,10 +27,10 @@ media auto-share.
 We use our customized flavor of Markdown, you can find the complete doc
 here: gentle.io/markdown/
 
-* # Title (<h1>)
-* ## Title (<h2>)
-* ### Title (<h3>)
-* #...# Title (<h6>)
+* # Title (Big title)
+* ## Title (Header)
+* ### Title (Subtitle)
+* #...# Title (Subheader>)
 * [link to url](url) 
 * youtube:youtube_code
 * \*italics\*
