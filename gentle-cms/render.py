@@ -58,6 +58,12 @@ class Render:
             for line in stream:
                 check_entry_type(line)
 
+    def scan_entry(self, entry):
+        # Find images
+        # Find youtube videos
+        # Find links
+        return None
+
     def check_entry_type(entry):
         if is_header(entry) is True:
             return FORMAT_TYPE.HEADER
