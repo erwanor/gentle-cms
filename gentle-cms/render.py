@@ -7,37 +7,41 @@ import yaml
 #  HELPERS
 ##################
 
-def input_checking(inputArgs):
-    if check_length(inputArgs, 2) is False or \
-       check_extension(inputArgs, ".md") is False:
-        print "usage: render.py index.md"
-        sys.exit()
-    else:
-            return inputArgs[1]
-
-def check_length(inputArgs, length):
-    if len(inputArgs) == length:
-        return True
-    else:
-        return False
-
-def check_extension(inputArgs, extension):
-    extensionLength = len(extension)
-    fileToCheck = inputArgs[1]
-    if fileToCheck[-extensionLength:] == extension:
-        return True
-    else:
-        return False
-
-def enum(*sequential, **named):
-    enums = dict(zip(sequential, range(len(sequential))), **named)
-    reverse = dict((value, key) for key, value in enums.iteritems())
-    enums['reverse_mapping'] = reverse
-    return type('Enum', (), enums)
-
 class Utils:
     def __init__(self):
         pass
+
+    @staticmethod
+    def input_checking(inputArgs):
+        if check_length(inputArgs, 2) is False or \
+           check_extension(inputArgs, ".md") is False:
+            print "usage: render.py index.md"
+            sys.exit()
+        else:
+                return inputArgs[1]
+
+    @staticmethod
+    def check_length(inputArgs, length):
+        if len(inputArgs) == length:
+            return True
+        else:
+            return False
+
+    @staticmethod
+    def check_extension(inputArgs, extension):
+        extensionLength = len(extension)
+        fileToCheck = inputArgs[1]
+        if fileToCheck[-extensionLength:] == extension:
+            return True
+        else:
+            return False
+
+    @staticmethod
+    def enum(*sequential, **named):
+        enums = dict(zip(sequential, range(len(sequential))), **named)
+        reverse = dict((value, key) for key, value in enums.iteritems())
+        enums['reverse_mapping'] = reverse
+        return type('Enum', (), enums)
 
     @staticmethod
     def load_configuration():
@@ -62,9 +66,8 @@ class Utils:
         return True
 #################
 
-FORMAT_TYPE = enum(HEADER = 0, SUB_HEADER = 1, PARAGRAPH = 2, IMAGE = 3,
+FORMAT_TYPE = Utils.enum(HEADER = 0, SUB_HEADER = 1, PARAGRAPH = 2, IMAGE = 3,
                    YOUTUBE_VIDEO = 4, LINK = 5)
-
 
 class Render:
     def __init__(self, markdown_source):
