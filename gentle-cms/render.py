@@ -56,17 +56,18 @@ class Utils:
 
     @staticmethod
     def is_header(entry):
-        matched = match('^[\#]{1}([a-z-A-Z0-9- ]{1,})$', entry)
-        print matched
-        return True
+        matched = match('^[\#]{1}([a-z-A-Z-0-9- ._:)($\[\]!~@,-]{1,})$', entry)
+        return matched is not None
 
     @staticmethod
     def is_sub_header(entry):
-        return True
+        matched = match('^[\#]{2}([a-z-A-Z-0-9- ._:)($\[\]!~@,-]{1,})$', entry)
+        return matched is not None
 
     @staticmethod
     def is_paragraph(entry):
-        return True
+        matched = match('^[\-]{3}([a-z-A-Z-0-9- ._:)($\[\]!~@,-]{1,})[\-]{3}$', entry)
+        return matched is not None
 #################
 
 FORMAT_TYPE = Utils.enum(HEADER = 0, SUB_HEADER = 1, PARAGRAPH = 2, IMAGE = 3,
