@@ -48,6 +48,15 @@ def load_configuration():
 FORMAT_TYPE = enum(HEADER = 0, SUB_HEADER = 1, PARAGRAPH = 2, IMAGE = 3,
                    YOUTUBE_VIDEO = 4, LINK = 5)
 
-MARKDOWN_SOURCE = input_checking(sys.argv)
+class Render:
+    def __init__(self, markdown_source):
+        self.markdown_source = markdown_source
+        self.configuration = load_configuration()
 
-configuration = load_configuration()
+    def scan_source(self, source):
+        with open(source) as stream:
+            for line in stream:
+                check_entry_type(line)
+
+    def check_entry_type(entry):
+        print "tba"
