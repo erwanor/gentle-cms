@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
-import sys
-import yaml
+from sys import argv
+from yaml import load
+from re import match
 
 ##########
 #  HELPERS
@@ -48,13 +49,15 @@ class Utils:
         CONFIG_FILE  = "config.yaml"
         config_data  = {}
         stream       = open(CONFIG_FILE, 'r')
-        config_steam = yaml.load(stream)
+        config_steam = load(stream)
         for key, value in config_steam.items():
             config_data.update({key : value})
         return config_data
 
     @staticmethod
     def is_header(entry):
+        matched = match('^[\#]{1}([a-z-A-Z0-9- ]{1,})$', entry)
+        print matched
         return True
 
     @staticmethod
