@@ -1,0 +1,6 @@
+###############################
+domain_name: "domain.tld"
+blog_name: "gentle-cms"
+blog_description: "A content management system that is built on top of Git"
+author: "Aaron"
+theme: "/path/to/theme.css"
