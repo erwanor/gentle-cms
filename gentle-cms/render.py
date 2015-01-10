@@ -59,4 +59,9 @@ class Render:
                 check_entry_type(line)
 
     def check_entry_type(entry):
-        print "tba"
+        if is_header(entry) is True:
+            return FORMAT_TYPE.HEADER
+        elif is_sub_header(entry) is True:
+            return FORMAT_TYPE.SUB_HEADER
+        elif is_paragraph(entry) is True:
+            return FORMAT_TYPE.PARAGRAPH
