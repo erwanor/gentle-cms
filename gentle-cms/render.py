@@ -68,6 +68,12 @@ class Utils:
     def is_paragraph(entry):
         matched = match('^[\-]{3}([a-z-A-Z-0-9- ._:)($\[\]!~@,-]{1,})[\-]{3}$', entry)
         return matched is not None
+
+    @staticmethod
+    def match_images(line):
+        matched = match(' \[[a-z-A-Z-0-9]*\](\(+)(https?\:\/\/([a-z-A-Z-0-9]*\.?)\
+                *[a-z-A-Z-0-9-\/\~%\?\=\&\@]*)(\)+) ', line)
+        return matched is not None
 #################
 
 FORMAT_TYPE = Utils.enum(HEADER = 0, SUB_HEADER = 1, PARAGRAPH = 2, IMAGE = 3,
@@ -87,7 +93,7 @@ class Render:
         print markdown_data
 
     def scan_entry(self, entry):
-        # Find images
+        Utils.match_images(entry)
         # Find youtube videos
         # Find links
         return None
