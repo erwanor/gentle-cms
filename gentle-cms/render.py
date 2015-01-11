@@ -70,7 +70,7 @@ class Utils:
         return matched is not None
 
     @staticmethod
-    def match_images(line):
+    def match_links(line):
         matched = match(' \[[a-z-A-Z-0-9]*\](\(+)(https?\:\/\/([a-z-A-Z-0-9]*\.?)\
                 *[a-z-A-Z-0-9-\/\~%\?\=\&\@]*)(\)+) ', line)
         return matched is not None
@@ -93,7 +93,7 @@ class Render:
         print markdown_data
 
     def scan_entry(self, entry):
-        Utils.match_images(entry)
+        Utils.match_links(entry)
         # Find youtube videos
         # Find links
         return None
