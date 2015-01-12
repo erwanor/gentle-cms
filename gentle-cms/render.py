@@ -73,7 +73,7 @@ class Utils:
     def match_links(line):
         matched = match(' \[[a-z-A-Z-0-9]*\](\(+)(https?\:\/\/([a-z-A-Z-0-9]*\.?)\
                 *[a-z-A-Z-0-9-\/\~%\?\=\&\@]*)(\)+) ', line)
-        return matched is not None
+        return matched
 #################
 
 FORMAT_TYPE = Utils.enum(HEADER = 0, SUB_HEADER = 1, PARAGRAPH = 2, IMAGE = 3,
