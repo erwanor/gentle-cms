@@ -106,4 +106,8 @@ class Render:
             return FORMAT_TYPE.SUB_HEADER
         elif Utils.is_paragraph(entry) is True:
             return FORMAT_TYPE.PARAGRAPH
+            
+    @staticmethod
+    def generate_html(entry_type):
+        pass
 
