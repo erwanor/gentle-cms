@@ -93,7 +93,9 @@ class Render:
         print markdown_data
 
     def scan_entry(self, entry):
-        Utils.match_links(entry)
+        match = Utils.match_links(entry)
+        if match is not None:
+            check_match_type(match)
         # Find youtube videos
         # Find links
         return None
@@ -106,6 +108,11 @@ class Render:
             return FORMAT_TYPE.SUB_HEADER
         elif Utils.is_paragraph(entry) is True:
             return FORMAT_TYPE.PARAGRAPH
+    
+    @staticmethod
+    def check_match_type(match):
+        print match.group(0)
+        print match.group(1)
             
     @staticmethod
     def generate_html(entry_type):
