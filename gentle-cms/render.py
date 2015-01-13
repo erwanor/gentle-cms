@@ -71,8 +71,8 @@ class Utils:
 
 #################
 
-FORMAT_TYPE = Utils.enum(HEADER = 0, SUB_HEADER = 1, PARAGRAPH = 2, IMAGE = 3,
-                   YOUTUBE_VIDEO = 4, LINK = 5)
+FORMAT_TYPE = Utils.enum(HEADER = 0, SUB_HEADER = 1, PARAGRAPH = 2, UNKNOWN = 3)
+LINK_TYPE   = Utils.enum(IMAGE  = 0, YOUTUBE    = 1, LINK = 2, UNKNOWN = 3)
 
 class Render:
     def __init__(self, markdown_source):
@@ -91,14 +91,11 @@ class Render:
         match = Render.match_links(entry)
         if match is not None:
             Render.check_match_type(match)
-        # Find youtube videos
-        # Find links
         return None
 
     @staticmethod
     def match_links(line):
-        matched = match(' \[[a-z-A-Z-0-9]*\](\(+)(https?\:\/\/([a-z-A-Z-0-9]*\.?)\
-                *[a-z-A-Z-0-9-\/\~%\?\=\&\@]*)(\)+) ', line)
+        matched = match('\[([a-zA-Z]*)\]\((https?:\/\/[a-zA-Z-0-9-.-\/$?&=%$]*)\)', line)
         return matched
 
     @staticmethod
@@ -109,12 +106,19 @@ class Render:
             return FORMAT_TYPE.SUB_HEADER
         elif Utils.is_paragraph(entry) is True:
             return FORMAT_TYPE.PARAGRAPH
+        else:
+            return FORMAT_TYPE.UNKNOWN
     
     @staticmethod
     def check_match_type(match):
-        print match.group(0)
-        print match.group(1)
-            
+        if Utils.is_image(match.group(2)) is True:
+            return LINK_TYPE.IMAGE
+        elif Utils.is_youtube(match.group(2)) is True:
+            return LINK_TYPE.YOUTUBE
+        else:
+            return LINK_TYPE.LINK
+
+
     @staticmethod
     def generate_html(entry_type):
         pass
