@@ -95,7 +95,7 @@ class Render:
     def scan_entry(self, entry):
         match = Utils.match_links(entry)
         if match is not None:
-            check_match_type(match)
+            Render.check_match_type(match)
         # Find youtube videos
         # Find links
         return None
