@@ -69,11 +69,6 @@ class Utils:
         matched = match('^[\-]{3}([a-z-A-Z-0-9- ._:)($\[\]!~@,-]{1,})[\-]{3}$', entry)
         return matched is not None
 
-    @staticmethod
-    def match_links(line):
-        matched = match(' \[[a-z-A-Z-0-9]*\](\(+)(https?\:\/\/([a-z-A-Z-0-9]*\.?)\
-                *[a-z-A-Z-0-9-\/\~%\?\=\&\@]*)(\)+) ', line)
-        return matched
 #################
 
 FORMAT_TYPE = Utils.enum(HEADER = 0, SUB_HEADER = 1, PARAGRAPH = 2, IMAGE = 3,
@@ -93,12 +88,18 @@ class Render:
         print markdown_data
 
     def scan_entry(self, entry):
-        match = Utils.match_links(entry)
+        match = Render.match_links(entry)
         if match is not None:
             Render.check_match_type(match)
         # Find youtube videos
         # Find links
         return None
+
+    @staticmethod
+    def match_links(line):
+        matched = match(' \[[a-z-A-Z-0-9]*\](\(+)(https?\:\/\/([a-z-A-Z-0-9]*\.?)\
+                *[a-z-A-Z-0-9-\/\~%\?\=\&\@]*)(\)+) ', line)
+        return matched
 
     @staticmethod
     def check_entry_type(entry):
