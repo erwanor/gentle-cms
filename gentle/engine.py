@@ -64,7 +64,8 @@ class Utils:
 
         @staticmethod
         def match_links(line):
-            matched = finditer('\[([a-zA-Z]*)\]\((https?:\/\/[a-zA-Z-0-9-.-\/$?&=%$]*)\)', line)
+            matched = findall('\[([a-zA-Z0-9\ \!\?\,\:\*\'\;\/\/\.\&\=\?\%]*)\]\
+                    \((https?\:\/\/[a-zA-Z-0-9\/\.\&\=\?\%]*)\)', text)
             return matched
 
         @staticmethod
