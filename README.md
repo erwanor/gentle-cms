@@ -7,7 +7,10 @@ and tries to leverage the amazing power of version control to make
 content creation more engaging and easy.
 
 # How does it works?
-See the (wiki)[http://link.to.wiki.org/]
 
 # Installation:
-curl url/setup.sh | sh
+
+# Contribute:
+
+# Author:
+Aaron
