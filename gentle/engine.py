@@ -42,6 +42,25 @@ class Utils:
         else:
             return False
 
+    @staticmethod
+    def build_link(title, url):
+        return '[' + title + ']' + '(' + url + ')'
+
+    @staticmethod
+    def escape(link):
+        escaped_string = ""
+        for character in link:
+            if character == '[':
+                escaped_string += '\['
+            elif character == ']':
+                escaped_string += '\]'
+            elif character == '(':
+                escaped_string += '\('
+            elif character == ')':
+                escaped_string += '\)'
+            else:
+                escaped_string += character
+        return escaped_string
 
     class Identify:
         def __init__(self):
@@ -63,11 +82,6 @@ class Utils:
             return matched is not None
 
         @staticmethod
-        def match_links(raw_entry):
-            matched = findall('\[([a-zA-Z0-9\ \!\?\,\:\*\'\;\/\/\.\&\=\?\%]*)\]\((https?\:\/\/[a-zA-Z-0-9\/\.\&\=\?\%]*)\)', raw_entry)
-            return matched
-
-        @staticmethod
         def check_entry_type(entry):
             if self.is_header(entry) is True:
                 return ENTRY_TYPE.HEADER
@@ -77,15 +91,6 @@ class Utils:
                 return ENTRY_TYPE.PARAGRAPH
             else:
                 return ENTRY_TYPE.UNKNOWN
-
-        @staticmethod
-        def check_match_type(match):
-            if self.is_image(match.group(2)) is True:
-                return LINK_TYPE.IMAGE
-            elif self.is_youtube(match.group(2)) is True:
-                return LINK_TYPE.YOUTUBE
-            else:
-                return LINK_TYPE.LINK
 
 class Configuration:
     def __init__(self, config="config.yaml"):
@@ -106,25 +111,77 @@ class PreProcessing:
         self.markdown_source = markdown_source
 
     def scan_source(self, source):
-        markdown_data = []
+        preprocessed_data = []
         with open(source) as stream:
-            for line in stream:
-                markdown_data.append((Utils.Identify.check_entry_type(line), line))
-                print line
-        print markdown_data
+            for block in stream:
+                entry_type = Utils.Identify.check_match_type(block)
+                data = (entry_type, block)
+                preprocessed_data.append(data)
+        return preprocessed_data
 
-    def scan_entry(self, raw_entry):
-        match = Utils.Identify.match_links(raw_entry)
-        if match is not None:
-            match_type = Utils.Identify.check_match_type(match)
-
-        return None
+    def scan_entry(self, preprocessed_data):
+        processed_data = []
+        for superstructure in preprocessed_data:
+            entry_type, raw_entry = superstructure
+            style_processed_entry = Processing.style(raw_entry)
+            processed_entry = Processing.links(style_processed_entry)
+            processed_data.append((entry_type, processed_entry))
+        return processed_data
 
 class Processing:
     def __init__(self):
-        pass
-
-    def link_to_html(self, match):
-        pass
-
         #self.configuration = Configuration.load_configuration()
+        pass
+
+    @staticmethod
+    def links(to_process):
+        Process = Processing()
+        link_catalog = [Process.regular_links, Process.youtube_links, Process.image]
+        for type_link in link_catalog:
+            processed = type_link(to_process)
+        return processed
+
+    def regular_links(self, data):
+        pattern = "\[([a-zA-Z0-9\ \!\?\,\:\*\'\;\/\/\.\&\=\?\%]*)\]\((https?\:\/\/[a-zA-Z-0-9\/\.\&\=\?\%]*)\)"
+        repl = '<a href="\\2">\\1</a>'
+        processed = sub(pattern, repl, data)
+        return processed
+
+    def youtube_links(self, data):
+        return data
+
+    def image(data):
+        pattern = "\[([a-zA-Z0-9\ \!\?\,\:\*\'\;\/\/\.\&\=\?\%]*)\]\((https?\:\/\/[a-zA-Z-0-9\/\.\&\=\?\%]*)\)"
+        repl = '<img alt="\\1" href="\\2" />'
+        processed = sub(pattern, repl, data)
+        return processed
+
+    @staticmethod
+    def style(to_process):
+        Process = Processing()
+        style_format = [Process.bold, Process.italic, Process.underline]
+        for formatting in style_format:
+            processed = formatting(to_process)
+        return processed
+
+    def bold(self, data):
+        pattern = "\*[a-z-A-Z-0-9\?\!\.\*\[\]\(\)\:\/\?\&\=\!\;\ ]*\*"
+        repl    = "<b>\\1</b>"
+        processed = sub(pattern, repl, data)
+        return processed
+
+    def italic(self, data):
+        pattern = "\*\*[a-z-A-Z-0-9\?\!\.\*\[\]\(\)\:\/\?\&\=\!\;\ ]*\*\*"
+        repl    = "<i>\\1</i>"
+        processed = sub(pattern, repl, data)
+        return processed
+
+    def underline(self, data):
+        pattern = "\_[a-z-A-Z-0-9\?\!\.\*\[\]\(\)\:\/\?\&\=\!\;\ ]*\_"
+        repl    = "<u>\\1</u>"
+        processed = sub(pattern, repl, data)
+        return processed
+
+    @staticmethod
+    def compile(processed_data):
+        return processed_data
