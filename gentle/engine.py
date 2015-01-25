@@ -2,10 +2,16 @@
 
 from sys import argv
 from yaml import load
-from re import match
+from re import match, findall
 
-FORMAT_TYPE = Utils.enum(HEADER = 0, SUB_HEADER = 1, PARAGRAPH = 2, UNKNOWN = 3)
-LINK_TYPE   = Utils.enum(IMAGE  = 0, YOUTUBE    = 1, LINK = 2, UNKNOWN = 3)
+def enum(*sequential, **named):
+    enums = dict(zip(sequential, range(len(sequential))), **named)
+    reverse = dict((value, key) for key, value in enums.iteritems())
+    enums['reverse_mapping'] = reverse
+    return type('Enum', (), enums)
+
+ENTRY_TYPE = enum(HEADER = 0, SUB_HEADER = 1, PARAGRAPH = 2, UNKNOWN = 3)
+LINK_TYPE   = enum(IMAGE  = 0, YOUTUBE    = 1, LINK = 2, UNKNOWN = 3)
 
 class Utils:
     def __init__(self):
@@ -36,12 +42,6 @@ class Utils:
         else:
             return False
 
-    @staticmethod
-    def enum(*sequential, **named):
-        enums = dict(zip(sequential, range(len(sequential))), **named)
-        reverse = dict((value, key) for key, value in enums.iteritems())
-        enums['reverse_mapping'] = reverse
-        return type('Enum', (), enums)
 
     class Identify:
         def __init__(self):
@@ -63,21 +63,20 @@ class Utils:
             return matched is not None
 
         @staticmethod
-        def match_links(line):
-            matched = findall('\[([a-zA-Z0-9\ \!\?\,\:\*\'\;\/\/\.\&\=\?\%]*)\]\
-                    \((https?\:\/\/[a-zA-Z-0-9\/\.\&\=\?\%]*)\)', text)
+        def match_links(raw_entry):
+            matched = findall('\[([a-zA-Z0-9\ \!\?\,\:\*\'\;\/\/\.\&\=\?\%]*)\]\((https?\:\/\/[a-zA-Z-0-9\/\.\&\=\?\%]*)\)', raw_entry)
             return matched
 
         @staticmethod
         def check_entry_type(entry):
             if self.is_header(entry) is True:
-                return FORMAT_TYPE.HEADER
+                return ENTRY_TYPE.HEADER
             elif self.is_sub_header(entry) is True:
-                return FORMAT_TYPE.SUB_HEADER
+                return ENTRY_TYPE.SUB_HEADER
             elif self.is_paragraph(entry) is True:
-                return FORMAT_TYPE.PARAGRAPH
+                return ENTRY_TYPE.PARAGRAPH
             else:
-                return FORMAT_TYPE.UNKNOWN
+                return ENTRY_TYPE.UNKNOWN
 
         @staticmethod
         def check_match_type(match):
