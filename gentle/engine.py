@@ -63,6 +63,11 @@ class Utils:
             return matched is not None
 
         @staticmethod
+        def match_links(line):
+            matched = finditer('\[([a-zA-Z]*)\]\((https?:\/\/[a-zA-Z-0-9-.-\/$?&=%$]*)\)', line)
+            return matched
+
+        @staticmethod
         def check_entry_type(entry):
             if self.is_header(entry) is True:
                 return FORMAT_TYPE.HEADER
@@ -83,14 +88,13 @@ class Utils:
                 return LINK_TYPE.LINK
 
 class Configuration:
-    def __init__(self):
-        pass
+    def __init__(self, config="config.yaml"):
+        self.CONFIG_FILE = config
 
     @staticmethod
     def load_configuration():
-        CONFIG_FILE  = "config.yaml"
         config_data  = {}
-        stream       = open(CONFIG_FILE, 'r')
+        stream       = open(self.CONFIG_FILE, 'r')
         config_steam = load(stream)
         for key, value in config_steam.items():
             config_data.update({key : value})
@@ -100,7 +104,6 @@ class Configuration:
 class PreProcessing:
     def __init__(self, markdown_source):
         self.markdown_source = markdown_source
-        self.configuration = Configuration.load_configuration()
 
     def scan_source(self, source):
         markdown_data = []
@@ -110,14 +113,18 @@ class PreProcessing:
                 print line
         print markdown_data
 
-    def scan_entry(self, entry):
-        match = Utils.Identify.match_links(entry)
+    def scan_entry(self, raw_entry):
+        match = Utils.Identify.match_links(raw_entry)
         if match is not None:
-            Utils.Identify.check_match_type(match)
+            match_type = Utils.Identify.check_match_type(match)
+
         return None
 
-    @staticmethod
-    def match_links(line):
-        matched = match('\[([a-zA-Z]*)\]\((https?:\/\/[a-zA-Z-0-9-.-\/$?&=%$]*)\)', line)
-        return matched
+class Processing:
+    def __init__(self):
+        pass
 
+    def link_to_html(self, match):
+        pass
+
+        #self.configuration = Configuration.load_configuration()
