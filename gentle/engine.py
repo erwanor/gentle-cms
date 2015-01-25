@@ -138,17 +138,17 @@ class Processing:
         Process = Processing()
         structure_catalog = [Process.header, Process.subheader, Process.title, Process.paragraph]
         return structure_catalog[structure_type](structure)
-    
+
     def header(self, entry):
         if entry[0] == '#':
             entry = entry[1:]
         return '<h1>' + entry + '</h1>'
-        
+
     def subheader(self, entry):
         if entry[:2] == '##':
             entry = entry[2:]
         return '<h2>' + entry + '</h2>'
-    
+
     def title(self, entry):
         if entry[:3] == '###':
             entry = entry[3:]
@@ -158,7 +158,7 @@ class Processing:
         if entry[:3] == '---' and entry[-3:] == '---':
             entry = entry[3:-3]
         return '<p>' + entry + '</p>'
-        
+
     @staticmethod
     def links(to_process):
         Process = Processing()
