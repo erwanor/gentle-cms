@@ -91,7 +91,7 @@ class Utils:
             else:
                 return ENTRY_TYPE.UNKNOWN
 
-class Configuration:
+class Configuration(object):
     def __init__(self, config="config.yaml"):
         self.CONFIG_FILE = config
 
@@ -129,9 +129,19 @@ class PreProcessing:
 
 class Processing:
     def __init__(self):
-        #self.configuration = Configuration.load_configuration()
-        pass
+        self.configuration = Configuration.load_configuration()
+        self.header = '<html><head><title></title>\
+        <link type="text/css" rel="stylesheet" href="style/.css" />\
+        </head><body>'
+        self.footer = '</body></html>'
 
+    @staticmethod
+    def compile(fully_processed_data):
+        Process = Processing()
+        body = ""
+        for structure in fully_processed_data:
+            body += ' ' + structure
+            return Process.header + body + Process.footer
     @staticmethod
     def superstructure(data):
         structure_type, structure = data
@@ -211,3 +221,11 @@ class Processing:
     @staticmethod
     def compile(processed_data):
         return processed_data
+
+class Main:
+    def __init__(self, configuration_file = "config.yaml"):
+        self.configuration_file = configuration_file
+        pass
+
+    def create_article(self, path_to_markdown_article):
+        Configuration.load_configuration(self.configuration_file)
