@@ -1,6 +1,6 @@
 gentle-cms
 ==========
-https://travis-ci.org/aaronwinter/gentle-cms.svg?branch=master
+[TravisCI badge](https://travis-ci.org/aaronwinter/gentle-cms.svg?branch=master)
 
 # What is it?
 Gentle-cms is a simple content management system that works through Git
