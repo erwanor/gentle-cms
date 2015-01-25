@@ -2,7 +2,7 @@
 
 from sys import argv
 from yaml import load
-from re import match, findall
+from re import match, findall, sub
 
 def enum(*sequential, **named):
     enums = dict(zip(sequential, range(len(sequential))), **named)
