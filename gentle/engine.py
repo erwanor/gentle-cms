@@ -2,7 +2,7 @@
 
 from sys import argv
 from yaml import load
-from re import match, findall
+from re import match, findall, sub
 
 def enum(*sequential, **named):
     enums = dict(zip(sequential, range(len(sequential))), **named)
@@ -11,7 +11,6 @@ def enum(*sequential, **named):
     return type('Enum', (), enums)
 
 ENTRY_TYPE = enum(HEADER = 0, SUB_HEADER = 1, PARAGRAPH = 2, UNKNOWN = 3)
-LINK_TYPE   = enum(IMAGE  = 0, YOUTUBE    = 1, LINK = 2, UNKNOWN = 3)
 
 class Utils:
     def __init__(self):
@@ -111,13 +110,13 @@ class PreProcessing:
         self.markdown_source = markdown_source
 
     def scan_source(self, source):
-        preprocessed_data = []
+        processed_data = []
         with open(source) as stream:
             for block in stream:
                 entry_type = Utils.Identify.check_match_type(block)
-                data = (entry_type, block)
-                preprocessed_data.append(data)
-        return preprocessed_data
+                proc_entry = Processing.superstructure((entry_type, block))
+                processed_data.append((proc_entry, entry_type))
+        return processed_data
 
     def scan_entry(self, preprocessed_data):
         processed_data = []
@@ -133,6 +132,33 @@ class Processing:
         #self.configuration = Configuration.load_configuration()
         pass
 
+    @staticmethod
+    def superstructure(data):
+        structure_type, structure = data
+        Process = Processing()
+        structure_catalog = [Process.header, Process.subheader, Process.title, Process.paragraph]
+        return structure_catalog[structure_type](structure)
+    
+    def header(self, entry):
+        if entry[0] == '#':
+            entry = entry[1:]
+        return '<h1>' + entry + '</h1>'
+        
+    def subheader(self, entry):
+        if entry[:2] == '##':
+            entry = entry[2:]
+        return '<h2>' + entry + '</h2>'
+    
+    def title(self, entry):
+        if entry[:3] == '###':
+            entry = entry[3:]
+        return '<h4>' + entry + '</h4>'
+
+    def paragraph(self, entry):
+        if entry[:3] == '---' and entry[-3:] == '---':
+            entry = entry[3:-3]
+        return '<p>' + entry + '</p>'
+        
     @staticmethod
     def links(to_process):
         Process = Processing()
