@@ -1,3 +1,4 @@
+# Build status:
 ![TravisCI badge](https://travis-ci.org/aaronwinter/gentle-cms.svg?branch=master)
 
 # What is it?
