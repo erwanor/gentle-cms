@@ -15,7 +15,7 @@ ENTRY_TYPE = enum(HEADER = 0, SUB_HEADER = 1, PARAGRAPH = 2, UNKNOWN = 3)
 class Utils:
     def __init__(self):
         pass
-
+    
     @staticmethod
     def input_checking(inputArgs):
         if check_length(inputArgs, 2) is False or \
@@ -40,26 +40,6 @@ class Utils:
             return True
         else:
             return False
-
-    @staticmethod
-    def build_link(title, url):
-        return '[' + title + ']' + '(' + url + ')'
-
-    @staticmethod
-    def escape(link):
-        escaped_string = ""
-        for character in link:
-            if character == '[':
-                escaped_string += '\['
-            elif character == ']':
-                escaped_string += '\]'
-            elif character == '(':
-                escaped_string += '\('
-            elif character == ')':
-                escaped_string += '\)'
-            else:
-                escaped_string += character
-        return escaped_string
 
     class Identify:
         def __init__(self):
